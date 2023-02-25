@@ -15,7 +15,7 @@ public class Event
     public string Status { get; set; }
     public int MinimumAcceptance { get; set; }
 
-    public DiscordServer Server { get; set; }
+    public Server Server { get; set; }
     public ICollection<EventMember> EventMembers { get; set; }
     public ICollection<Reminder> Reminders { get; set; }
     public ICollection<RSVP> Rsvps { get; set; }

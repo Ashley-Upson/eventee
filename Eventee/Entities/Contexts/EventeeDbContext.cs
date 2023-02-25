@@ -13,7 +13,7 @@ public class EventeeDbContext : DbContext
         this.config = config;
     }
 
-    public DbSet<DiscordServer> DiscordServers { get; set; }
+    public DbSet<Server> DiscordServers { get; set; }
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Event> Events { get; set; }
@@ -25,17 +25,17 @@ public class EventeeDbContext : DbContext
     {
         base.OnModelCreating(builder);
         
-        builder.Entity<DiscordServer>()
+        builder.Entity<Server>()
             .HasMany(server => server.Channels)
             .WithOne(channel => channel.Server)
             .HasForeignKey(channel => channel.ServerId);
 
-        builder.Entity<DiscordServer>()
+        builder.Entity<Server>()
             .HasMany(server => server.Roles)
             .WithOne(rsvp => rsvp.Server)
             .HasForeignKey(rsvp => rsvp.ServerId);
 
-        builder.Entity<DiscordServer>()
+        builder.Entity<Server>()
             .HasMany(server => server.Events)
             .WithOne(discordEvent => discordEvent.Server)
             .HasForeignKey(discordEvent => discordEvent.ServerId);
@@ -55,7 +55,7 @@ public class EventeeDbContext : DbContext
         builder.Entity<EventMember>()
             .HasOne(eventMember => eventMember.Member)
             .WithMany(member => member.EventMembers)
-            .HasForeignKey(eventMember => eventMember.EventId);
+            .HasForeignKey(eventMember => eventMember.MemberId);
 
         builder.Entity<Event>()
             .HasMany(discordEvent => discordEvent.Reminders)
@@ -77,7 +77,10 @@ public class EventeeDbContext : DbContext
             .WithMany(discordEvent => discordEvent.Rsvps)
             .HasForeignKey(rsvp => rsvp.EventId);
 
-        
+        builder.Entity<RSVP>()
+            .HasOne(rsvp => rsvp.Member)
+            .WithMany(discordEvent => discordEvent.Rsvps)
+            .HasForeignKey(rsvp => rsvp.MemberId);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
