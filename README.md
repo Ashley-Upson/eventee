@@ -26,3 +26,6 @@
     - The ability to add optional attendees
     - Options to include "I will attend", "I may be able to attend", "I cannot attend"
     - When an event reaches the minimum level of acceptance RSVP's, an Event in Discord should be created
+
+## RC3 Features:
+    - Private events
