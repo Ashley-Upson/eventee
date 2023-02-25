@@ -12,6 +12,8 @@ public class Event
     public DateTime EndDate { get; set; }
     public string Location { get; set; }
     public bool IsPublic { get; set; }
+    public string Status { get; set; }
+    public int MinimumAcceptance { get; set; }
 
     public DiscordServer Server { get; set; }
     public ICollection<Member> Members { get; set; }
