@@ -12,8 +12,9 @@ public class Event
     public DateTime EndDate { get; set; }
     public string Location { get; set; }
     public bool IsPublic { get; set; }
-    
+
     public DiscordServer Server { get; set; }
-    public ICollection<EventMember> Members { get; set; }
-    public ICollection<EventReminder> Reminders { get; set; }
+    public ICollection<Member> Members { get; set; }
+    public ICollection<Reminder> Reminders { get; set; }
+    public ICollection<RSVP> Rsvps { get; set; }
 }

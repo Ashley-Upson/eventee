@@ -17,8 +17,8 @@ public class EventeeDbContext : DbContext
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Event> Events { get; set; }
-    public DbSet<EventMember> EventMembers { get; set; }
-    public DbSet<EventReminder> EventReminders { get; set; }
+    public DbSet<Member> EventMembers { get; set; }
+    public DbSet<Reminder> EventReminders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -44,7 +44,7 @@ public class EventeeDbContext : DbContext
             .WithMany(em => em.Events)
             .UsingEntity<Dictionary<string, object>>(
                 "EventMemberEvent",
-                j => j.HasOne<EventMember>().WithMany().HasForeignKey("MemberId"),
+                j => j.HasOne<Member>().WithMany().HasForeignKey("MemberId"),
                 j => j.HasOne<Event>().WithMany().HasForeignKey("EventId")
             );
 
@@ -62,6 +62,16 @@ public class EventeeDbContext : DbContext
             .HasOne(r => r.Server)
             .WithMany(s => s.Roles)
             .HasForeignKey(r => r.ServerId);
+
+        builder.Entity<RSVP>()
+            .HasOne(r => r.Event)
+            .WithMany(e => e.Rsvps)
+            .HasForeignKey(r => r.EventId);
+
+        builder.Entity<RSVP>()
+            .HasOne(e => e.Member)
+            .WithMany(m => m.Rsvps)
+            .HasForeignKey(er => er.EventId);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

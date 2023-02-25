@@ -1,6 +1,6 @@
 namespace Eventee.Entities;
 
-public class EventReminder
+public class Reminder
 {
     public int Id { get; set; }
     public int EventId { get; set; }
