@@ -17,61 +17,67 @@ public class EventeeDbContext : DbContext
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Event> Events { get; set; }
-    public DbSet<Member> EventMembers { get; set; }
-    public DbSet<Reminder> EventReminders { get; set; }
+    public DbSet<Member> Members { get; set; }
+    public DbSet<Reminder> Reminders { get; set; }
+    public DbSet<EventMember> EventMembers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         
         builder.Entity<DiscordServer>()
-            .HasMany(s => s.Channels)
-            .WithOne(c => c.Server)
-            .HasForeignKey(c => c.ServerId);
+            .HasMany(server => server.Channels)
+            .WithOne(channel => channel.Server)
+            .HasForeignKey(channel => channel.ServerId);
 
         builder.Entity<DiscordServer>()
-            .HasMany(s => s.Roles)
-            .WithOne(r => r.Server)
-            .HasForeignKey(r => r.ServerId);
+            .HasMany(server => server.Roles)
+            .WithOne(rsvp => rsvp.Server)
+            .HasForeignKey(rsvp => rsvp.ServerId);
 
         builder.Entity<DiscordServer>()
-            .HasMany(s => s.Events)
-            .WithOne(e => e.Server)
-            .HasForeignKey(e => e.ServerId);
+            .HasMany(server => server.Events)
+            .WithOne(discordEvent => discordEvent.Server)
+            .HasForeignKey(discordEvent => discordEvent.ServerId);
+
+        builder.Entity<EventMember>()
+            .HasKey(eventMember => new
+            {
+                eventMember.MemberId,
+                eventMember.EventId
+            });
+
+        builder.Entity<EventMember>()
+            .HasOne(eventMember => eventMember.Event)
+            .WithMany(member => member.EventMembers)
+            .HasForeignKey(eventMember => eventMember.EventId);
+
+        builder.Entity<EventMember>()
+            .HasOne(eventMember => eventMember.Member)
+            .WithMany(member => member.EventMembers)
+            .HasForeignKey(eventMember => eventMember.EventId);
 
         builder.Entity<Event>()
-            .HasMany(e => e.Members)
-            .WithMany(em => em.Events)
-            .UsingEntity<Dictionary<string, object>>(
-                "EventMemberEvent",
-                j => j.HasOne<Member>().WithMany().HasForeignKey("MemberId"),
-                j => j.HasOne<Event>().WithMany().HasForeignKey("EventId")
-            );
-
-        builder.Entity<Event>()
-            .HasMany(e => e.Reminders)
-            .WithOne(er => er.Event)
-            .HasForeignKey(er => er.EventId);
+            .HasMany(discordEvent => discordEvent.Reminders)
+            .WithOne(reminder => reminder.Event)
+            .HasForeignKey(reminder => reminder.EventId);
 
         builder.Entity<Channel>()
-            .HasOne(c => c.Server)
-            .WithMany(s => s.Channels)
-            .HasForeignKey(c => c.ServerId);
+            .HasOne(channel => channel.Server)
+            .WithMany(server => server.Channels)
+            .HasForeignKey(channel => channel.ServerId);
 
         builder.Entity<Role>()
-            .HasOne(r => r.Server)
-            .WithMany(s => s.Roles)
-            .HasForeignKey(r => r.ServerId);
+            .HasOne(role => role.Server)
+            .WithMany(server => server.Roles)
+            .HasForeignKey(role => role.ServerId);
 
         builder.Entity<RSVP>()
-            .HasOne(r => r.Event)
-            .WithMany(e => e.Rsvps)
-            .HasForeignKey(r => r.EventId);
+            .HasOne(rsvp => rsvp.Event)
+            .WithMany(discordEvent => discordEvent.Rsvps)
+            .HasForeignKey(rsvp => rsvp.EventId);
 
-        builder.Entity<RSVP>()
-            .HasOne(e => e.Member)
-            .WithMany(m => m.Rsvps)
-            .HasForeignKey(er => er.EventId);
+        
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
