@@ -6,4 +6,7 @@ public class EventMember
     public ulong MemberId { get; set; }
     public int EventId { get; set; }
     public string Username { get; set; }
+    
+    public ICollection<Event> Events { get; set; }
+    public ICollection<DiscordServer> Servers { get; set; }
 }

@@ -7,4 +7,6 @@ public class EventReminder
     public DateTime ReminderTime { get; set; }
     public string ReminderType { get; set; }
     public ulong DestinationId { get; set; }
+    
+    public Event Event { get; set; }
 }

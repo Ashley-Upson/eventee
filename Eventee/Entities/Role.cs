@@ -7,4 +7,6 @@ public class Role
     public bool CanCreateEvents { get; set; }
     public bool CanManageEvents { get; set; }
     public bool IsAdminRole { get; set; }
+    
+    public DiscordServer Server { get; set; }
 }

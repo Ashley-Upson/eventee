@@ -26,21 +26,21 @@ public class EventeeDbContext : DbContext
         
         builder.Entity<DiscordServer>()
             .HasMany(s => s.Channels)
-            .WithOne(c => c.DiscordServer)
+            .WithOne(c => c.Server)
             .HasForeignKey(c => c.ServerId);
 
         builder.Entity<DiscordServer>()
             .HasMany(s => s.Roles)
-            .WithOne(r => r.DiscordServer)
+            .WithOne(r => r.Server)
             .HasForeignKey(r => r.ServerId);
 
         builder.Entity<DiscordServer>()
             .HasMany(s => s.Events)
-            .WithOne(e => e.DiscordServer)
+            .WithOne(e => e.Server)
             .HasForeignKey(e => e.ServerId);
 
         builder.Entity<Event>()
-            .HasMany(e => e.EventMembers)
+            .HasMany(e => e.Members)
             .WithMany(em => em.Events)
             .UsingEntity<Dictionary<string, object>>(
                 "EventMemberEvent",
@@ -49,28 +49,19 @@ public class EventeeDbContext : DbContext
             );
 
         builder.Entity<Event>()
-            .HasMany(e => e.EventReminders)
+            .HasMany(e => e.Reminders)
             .WithOne(er => er.Event)
             .HasForeignKey(er => er.EventId);
 
         builder.Entity<Channel>()
-            .HasOne(c => c.DiscordServer)
+            .HasOne(c => c.Server)
             .WithMany(s => s.Channels)
             .HasForeignKey(c => c.ServerId);
 
         builder.Entity<Role>()
-            .HasOne(r => r.DiscordServer)
+            .HasOne(r => r.Server)
             .WithMany(s => s.Roles)
             .HasForeignKey(r => r.ServerId);
-
-        builder.Entity<EventMember>()
-            .HasMany(em => em.DiscordServers)
-            .WithMany(s => s.EventMembers)
-            .UsingEntity<Dictionary<string, object>>(
-                "EventMemberDiscordServer",
-                j => j.HasOne<DiscordServer>().WithMany().HasForeignKey("ServerId"),
-                j => j.HasOne<EventMember>().WithMany().HasForeignKey("MemberId")
-            );
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
