@@ -1,8 +1,8 @@
 using Eventee.Entities;
 
-namespace Eventee.Discord.Services.Foundation.Interfaces;
+namespace Eventee.Discord.Services.Processing.Interfaces;
 
-public interface IRSVPService
+public interface IRSVPProcessingService
 {
     ValueTask<RSVP> AddRSVPAsync(RSVP rsvp);
 

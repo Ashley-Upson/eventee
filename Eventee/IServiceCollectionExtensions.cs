@@ -2,6 +2,8 @@ using Eventee.Discord.Brokers.Eventee;
 using Eventee.Discord.Brokers.Eventee.Interfaces;
 using Eventee.Discord.Services.Foundation;
 using Eventee.Discord.Services.Foundation.Interfaces;
+using Eventee.Discord.Services.Processing;
+using Eventee.Discord.Services.Processing.Interfaces;
 using Eventee.Entities.Contexts;
 using Eventee.Entities.Contexts.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,7 @@ public static class IServiceCollectionExtensions
         AddEventeeBrokers(services);
         AddEventeeServices(services);
         AddEventeeProcessing(services);
+        AddEventeeOrchestration(services);
     }
 
     private static void AddEventeeBrokers(IServiceCollection services)
@@ -47,6 +50,18 @@ public static class IServiceCollectionExtensions
     }
 
     private static void AddEventeeProcessing(IServiceCollection services)
+    {
+        services.AddTransient<IServerProcessingService, ServerProcessingService>();
+        services.AddTransient<IChannelProcessingService, ChannelProcessingService>();
+        services.AddTransient<IRoleProcessingService, RoleProcessingService>();
+        services.AddTransient<IEventProcessingService, EventProcessingService>();
+        services.AddTransient<IMemberProcessingService, MemberProcessingService>();
+        services.AddTransient<IReminderProcessingService, ReminderProcessingService>();
+        services.AddTransient<IEventMemberProcessingService, EventMemberProcessingService>();
+        services.AddTransient<IRSVPProcessingService, RSVPProcessingService>();
+    }
+
+    private static void AddEventeeOrchestration(IServiceCollection services)
     {
 
     }
