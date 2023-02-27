@@ -44,6 +44,37 @@ public class Program
         host.Run();
     }
 
+    static void ConfigureServices(IServiceCollection services, IConfiguration config)
+    {
+        Console.WriteLine("Configuring Services");
+
+        services.AddSingleton(config);
+
+        services.AddDbContext<EventeeDbContext>();
+        
+        services.AddEventee();
+
+        services.AddSingleton(x => new DiscordSocketClient(new DiscordSocketConfig
+        {
+            GatewayIntents = GatewayIntents.AllUnprivileged,
+            LogGatewayIntentWarnings = false,
+            AlwaysDownloadUsers = true,
+            LogLevel = LogSeverity.Debug
+        }));
+
+        // Used for slash commands and their registration with Discord.
+        services.AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()));
+
+        // Required to subscribe to the various client events used in conjunction with Interactions.
+        services.AddSingleton<InteractionHandler>();
+
+        services.AddSingleton(x => new CommandService(new CommandServiceConfig
+        {
+            LogLevel = LogSeverity.Debug,
+            DefaultRunMode = global::Discord.Commands.RunMode.Async
+        }));
+    }
+
     static async Task InitialiseDiscordBot(IHost host)
     {
         IServiceProvider provider = host.Services;
@@ -68,35 +99,6 @@ public class Program
 
         await client.LoginAsync(TokenType.Bot, discordToken);
         await client.StartAsync();
-    }
-
-    static void ConfigureServices(IServiceCollection services, IConfiguration config)
-    {
-        Console.WriteLine("Configuring Services");
-
-        services.AddSingleton(config);
-
-        services.AddDbContext<EventeeDbContext>();
-
-        services.AddSingleton(x => new DiscordSocketClient(new DiscordSocketConfig
-        {
-            GatewayIntents = GatewayIntents.AllUnprivileged,
-            LogGatewayIntentWarnings = false,
-            AlwaysDownloadUsers = true,
-            LogLevel = LogSeverity.Debug
-        }));
-
-        // Used for slash commands and their registration with Discord.
-        services.AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()));
-
-        // Required to subscribe to the various client events used in conjunction with Interactions.
-        services.AddSingleton<InteractionHandler>();
-
-        services.AddSingleton(x => new CommandService(new CommandServiceConfig
-        {
-            LogLevel = LogSeverity.Debug,
-            DefaultRunMode = global::Discord.Commands.RunMode.Async
-        }));
     }
 
     static Task Log(LogMessage arg)

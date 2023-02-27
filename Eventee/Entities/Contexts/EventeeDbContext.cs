@@ -13,7 +13,7 @@ public class EventeeDbContext : DbContext
         this.config = config;
     }
 
-    public DbSet<Server> DiscordServers { get; set; }
+    public DbSet<Server> Servers { get; set; }
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Event> Events { get; set; }
