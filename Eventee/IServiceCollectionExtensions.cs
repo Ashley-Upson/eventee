@@ -37,6 +37,13 @@ public static class IServiceCollectionExtensions
     private static void AddEventeeServices(IServiceCollection services)
     {
         services.AddTransient<IServerService, ServerService>();
+        services.AddTransient<IChannelService, ChannelService>();
+        services.AddTransient<IRoleService, RoleService>();
+        services.AddTransient<IEventService, EventService>();
+        services.AddTransient<IMemberService, MemberService>();
+        services.AddTransient<IReminderService, ReminderService>();
+        services.AddTransient<IEventMemberService, EventMemberService>();
+        services.AddTransient<IRSVPService, RSVPService>();
     }
 
     private static void AddEventeeProcessing(IServiceCollection services)
