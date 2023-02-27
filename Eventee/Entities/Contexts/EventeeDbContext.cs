@@ -20,6 +20,7 @@ public class EventeeDbContext : DbContext
     public DbSet<Member> Members { get; set; }
     public DbSet<Reminder> Reminders { get; set; }
     public DbSet<EventMember> EventMembers { get; set; }
+    public DbSet<RSVP> RSVPs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

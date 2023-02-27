@@ -23,14 +23,20 @@ public static class IServiceCollectionExtensions
         services.AddDbContext<EventeeDbContext>();
         services.AddTransient<IEventeeDbContextFactory, IEventeeDbContextFactory>();
 
-        services.AddTransient<IServerBroker, ServerBroker>();
         services.AddTransient<IDateTimeBroker, DateTimeBroker>();
-        services.AddTransient<IServerService, ServerService>();
+        services.AddTransient<IServerBroker, ServerBroker>();
+        services.AddTransient<IChannelBroker, ChannelBroker>();
+        services.AddTransient<IRoleBroker, RoleBroker>();
+        services.AddTransient<IEventBroker, EventBroker>();
+        services.AddTransient<IMemberBroker, MemberBroker>();
+        services.AddTransient<IReminderBroker, ReminderBroker>();
+        services.AddTransient<IEventMemberBroker, EventMemberBroker>();
+        services.AddTransient<IRSVPBroker, RSVPBroker>();
     }
 
     private static void AddEventeeServices(IServiceCollection services)
     {
-
+        services.AddTransient<IServerService, ServerService>();
     }
 
     private static void AddEventeeProcessing(IServiceCollection services)
