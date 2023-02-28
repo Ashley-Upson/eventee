@@ -2,6 +2,8 @@ using Eventee.Discord.Brokers.Eventee;
 using Eventee.Discord.Brokers.Eventee.Interfaces;
 using Eventee.Discord.Services.Foundation;
 using Eventee.Discord.Services.Foundation.Interfaces;
+using Eventee.Discord.Services.Orchestration;
+using Eventee.Discord.Services.Orchestration.Interfaces;
 using Eventee.Discord.Services.Processing;
 using Eventee.Discord.Services.Processing.Interfaces;
 using Eventee.Entities.Contexts;
@@ -63,6 +65,9 @@ public static class IServiceCollectionExtensions
 
     private static void AddEventeeOrchestration(IServiceCollection services)
     {
-
+        services.AddTransient<IServerOrchestrationService, ServerOrchestrationService>();
+        services.AddTransient<IMemberOrchestrationService, MemberOrchestrationService>();
+        services.AddTransient<IEventOrchestrationService, EventOrchestrationService>();
+        services.AddTransient<IEventMemberOrchestrationService, EventMemberOrchestrationService>();
     }
 }
