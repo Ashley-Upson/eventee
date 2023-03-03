@@ -26,7 +26,7 @@ public static class IServiceCollectionExtensions
     private static void AddEventeeBrokers(IServiceCollection services)
     {
         services.AddDbContext<EventeeDbContext>();
-        services.AddTransient<IEventeeDbContextFactory, IEventeeDbContextFactory>();
+        services.AddTransient<IEventeeDbContextFactory, EventeeDbContextFactory>();
 
         services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         services.AddTransient<IServerBroker, ServerBroker>();

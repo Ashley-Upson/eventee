@@ -85,7 +85,10 @@ public class Program
         await provider.GetRequiredService<InteractionHandler>().InitializeAsync();
         // var client = new DiscordSocketClient();
 
-        client.Ready += async () => { await commands.RegisterCommandsGloballyAsync(true); };
+        client.Ready += async () =>
+        {
+            await commands.RegisterCommandsGloballyAsync(true);
+        };
 
         client.Log += Log;
         commands.Log += Log;
