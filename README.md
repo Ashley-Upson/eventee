@@ -44,31 +44,31 @@
 ## Available commands:
 
 ## Commands to be implemented:
-- /eventee admin role add {@role}
-- /eventee admin role remove {@role}
-- /eventee admin role allow {create/manage/admin} {@role}
-- /eventee admin role deny {create/manage/admin} {@role}
-- /eventee admin reminder {#channel}
-- /eventee admin reminder disable
-- /eventee admin events enable
-- /eventee admin events disable
-- /eventee create {name} {location} {@required} {private (optional, default false)}
-- /eventee edit {eventID} minimum {min. required accepts}
-- /eventee edit {eventID} invite {required/optional} {@user}
-- /eventee edit {eventID} remove {@user}
-- /eventee edit {eventID} location {location}
-- /eventee edit {eventID} description {description}
-- /eventee edit {eventID} title {title}
-- /eventee edit {eventID} start {start}
-- /eventee edit {eventID} end {end}
-- /eventee edit {eventID} cancel
-- /eventee edit {eventID} confirm
-- /eventee edit {eventID} reminder add {date} {time} {type (optional, default channel)}
-- /eventee edit {eventID} reminder remove all
-- /eventee edit {eventID} reminder remove {date} {time} {type (optional, default channel)}
-- /eventee invites list
-- /eventee invites accept {eventID}
-- /eventee invites maybe {eventID}
-- /eventee invites decline {eventID}
-- /eventee event {eventID}
-- /eventee event {eventID} join
+- /evadmin role add {@role}
+- /evadmin role remove {@role}
+- /evadmin role allow {create/manage/admin} {@role}
+- /evadmin role deny {create/manage/admin} {@role}
+- /evadmin reminder {#channel}
+- /evadmin reminder disable
+- /evadmin events enable
+- /evadmin events disable
+- /evcreate {name} {location} {@required} {private (optional, default false)}
+- /evedit {eventID} minimum {min. required accepts}
+- /evedit {eventID} invite {required/optional} {@user}
+- /evedit {eventID} remove {@user}
+- /evedit {eventID} location {location}
+- /evedit {eventID} description {description}
+- /evedit {eventID} title {title}
+- /evedit {eventID} start {start}
+- /evedit {eventID} end {end}
+- /evedit {eventID} cancel
+- /evedit {eventID} confirm
+- /evedit {eventID} reminder add {date} {time} {type (optional, default channel)}
+- /evedit {eventID} reminder remove all
+- /evedit {eventID} reminder remove {date} {time} {type (optional, default channel)}
+- /evinvites list
+- /evinvites accept {eventID}
+- /evinvites maybe {eventID}
+- /evinvites decline {eventID}
+- /evevent {eventID}
+- /evevent {eventID} join
