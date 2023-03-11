@@ -1,6 +1,6 @@
-namespace ProfileAPI.Brokers.DateTime;
+namespace Eventee.Discord.Brokers.Interfaces;
 
 public interface IDateTimeBroker
 {
-    System.DateTime GetCurrentTimeUtc();
+    DateTime GetCurrentTimeUtc();
 }

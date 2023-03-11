@@ -5,12 +5,12 @@ using Eventee.Entities;
 
 namespace Eventee.Discord.Services.Orchestration;
 
-public class ServerOrchestrationService : IServerOrchestrationService
+public class DiscordOrchestrationService : IDiscordOrchestrationService
 {
-    private readonly IServerProcessingService serverService;
+    private readonly IDiscordProcessingService service;
 
-    public ServerOrchestrationService(IServerProcessingService serverService)
+    public DiscordOrchestrationService(IDiscordProcessingService service)
     {
-        this.serverService = serverService;
+        this.service = service;
     }
 }

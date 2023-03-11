@@ -1,8 +1,12 @@
-﻿using Discord;
+﻿using System.Runtime.CompilerServices;
+using Discord;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
 using Eventee.Discord;
+using Eventee.Discord.Services.Orchestration;
+using Eventee.Discord.Services.Orchestration.Interfaces;
+using Eventee.Discord.Services.Processing;
 using Eventee.Entities.Contexts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,49 +14,38 @@ using Microsoft.Extensions.Hosting;
 
 namespace Eventee;
 
-public class Program
+static class Program
 {
-    private readonly IConfiguration config;
+    private static IDiscordOrchestrationService discordService;
 
-    public Program(IConfiguration configuration)
-    {
-        this.config = configuration;
-    }
-
-    static async Task Main(string[] args)
+    static void Main(string[] args)
     {
         Console.WriteLine("Initialising app and building host...");
 
         var config = new ConfigurationBuilder()
             .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: false)
+            .AddEnvironmentVariables()
             .Build();
 
         var host = new HostBuilder()
             .ConfigureServices((_, services) => ConfigureServices(services, config))
-            .ConfigureAppConfiguration((configure) =>
-            {
-                configure.AddJsonFile("appsettings.json", optional: false);
-                configure.AddEnvironmentVariables();
-            })
             .Build();
 
+        Program.discordService = host.Services.GetRequiredService<IDiscordOrchestrationService>();
 
-        Console.WriteLine("Connecting to discord");
-
-        await InitialiseDiscordBot(host);
+        Console.WriteLine("Connecting to discord...");
 
         host.Run();
     }
 
     static void ConfigureServices(IServiceCollection services, IConfiguration config)
     {
-        Console.WriteLine("Configuring Services");
-
-        services.AddSingleton(config);
+        Console.WriteLine("Configuring Services...");
 
         services.AddDbContext<EventeeDbContext>();
-        
-        services.AddEventee();
+
+        services.AddEventee(config.GetValue<string>("DiscordToken"));
 
         services.AddSingleton(x => new DiscordSocketClient(new DiscordSocketConfig
         {
@@ -63,7 +56,7 @@ public class Program
         }));
 
         // Used for slash commands and their registration with Discord.
-        services.AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()));
+        services.AddSingleton(serviceProvider => new InteractionService(serviceProvider.GetRequiredService<DiscordSocketClient>()));
 
         // Required to subscribe to the various client events used in conjunction with Interactions.
         services.AddSingleton<InteractionHandler>();
@@ -73,40 +66,5 @@ public class Program
             LogLevel = LogSeverity.Debug,
             DefaultRunMode = global::Discord.Commands.RunMode.Async
         }));
-    }
-
-    static async Task InitialiseDiscordBot(IHost host)
-    {
-        IServiceProvider provider = host.Services;
-
-        var commands = provider.GetRequiredService<InteractionService>();
-        var client = provider.GetRequiredService<DiscordSocketClient>();
-
-        await provider.GetRequiredService<InteractionHandler>().InitializeAsync();
-        // var client = new DiscordSocketClient();
-
-        client.Ready += async () =>
-        {
-            await commands.RegisterCommandsGloballyAsync(true);
-        };
-
-        client.Log += Log;
-        commands.Log += Log;
-
-        var config = new ConfigurationBuilder()
-            .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        var discordToken = config.GetValue<string>("DiscordToken");
-
-        await client.LoginAsync(TokenType.Bot, discordToken);
-        await client.StartAsync();
-    }
-
-    static Task Log(LogMessage arg)
-    {
-        Console.WriteLine(arg.Message);
-        return Task.CompletedTask;
     }
 }
